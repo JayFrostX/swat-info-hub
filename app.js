@@ -72,3 +72,19 @@ function logout() {
     window.location.href = "index.html";
   });
 }
+
+// DELETE POST
+function deletePost(id) {
+
+  const confirmDelete = confirm("Are you sure you want to delete this post?");
+  if (!confirmDelete) return;
+
+  db.collection("posts").doc(id).delete()
+    .then(() => {
+      console.log("Post deleted");
+    })
+    .catch(error => {
+      alert("Error deleting post: " + error.message);
+    });
+
+}
