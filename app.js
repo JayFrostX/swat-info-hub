@@ -1,71 +1,27 @@
+// =======================
 // LOGIN
+// =======================
 function login() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email = document.getElementById("email")?.value;
+  const password = document.getElementById("password")?.value;
+
+  if (!email || !password) {
+    alert("Enter email and password");
+    return;
+  }
 
   auth.signInWithEmailAndPassword(email, password)
     .then(() => {
       alert("Logged in!");
+      window.location.href = "admin.html";
     })
     .catch(err => alert(err.message));
 }
 
-// REAL TIME POSTS
-if (document.getElementById("posts")) {
-  db.collection("posts").orderBy("created", "desc")
-    .onSnapshot(snapshot => {
-      const postsDiv = document.getElementById("posts");
-      postsDiv.innerHTML = "";
-      snapshot.forEach(doc => {
-        const post = doc.data();
-        postsDiv.innerHTML += `
-          <div class="post">${post.content}</div>
-        `;
-      });
-    });
-}
 
-// CREATE POST
-function createPost() {
-  const content = document.getElementById("postContent").value;
-  db.collection("posts").add({
-    content,
-    created: firebase.firestore.FieldValue.serverTimestamp()
-  });
-}
-
-// SIDEBAR REALTIME
-if (document.getElementById("sidebar")) {
-  db.collection("sidebarButtons")
-    .onSnapshot(snapshot => {
-      const sidebar = document.getElementById("sidebar");
-      sidebar.innerHTML = "<button onclick='toggleSidebar()'>☰</button>";
-      snapshot.forEach(doc => {
-        const btn = doc.data();
-        sidebar.innerHTML += `
-          <button onclick="location.href='${btn.link}'">
-            ${btn.text}
-          </button>
-        `;
-      });
-    });
-}
-
-function addButton() {
-  const text = document.getElementById("buttonText").value;
-  const link = document.getElementById("buttonLink").value;
-
-  db.collection("sidebarButtons").add({
-    text,
-    link
-  });
-}
-
-function toggleSidebar() {
-  document.getElementById("sidebar").classList.toggle("collapsed");
-  document.getElementById("main").classList.toggle("collapsed");
-}
-
+// =======================
+// LOGOUT
+// =======================
 function logout() {
   auth.signOut().then(() => {
     alert("Logged out");
@@ -73,41 +29,105 @@ function logout() {
   });
 }
 
-// DELETE POST
-function deletePost(id) {
 
-  const confirmDelete = confirm("Are you sure you want to delete this post?");
-  if (!confirmDelete) return;
-
-  db.collection("posts").doc(id).delete()
-    .then(() => {
-      console.log("Post deleted");
-    })
-    .catch(error => {
-      alert("Error deleting post: " + error.message);
-    });
-
-}
-// LOGIN FUNCTION
-function login() {
-   ...
-}
-
+// =======================
 // CREATE POST
+// =======================
 function createPost() {
-   ...
+  const content = document.getElementById("postContent")?.value;
+
+  if (!content) {
+    alert("Post content cannot be empty");
+    return;
+  }
+
+  db.collection("posts").add({
+    content,
+    created: firebase.firestore.FieldValue.serverTimestamp()
+  });
 }
 
-// ADD BUTTON
+
+// =======================
+// ADD SIDEBAR BUTTON
+// =======================
 function addButton() {
-   ...
+  const text = document.getElementById("buttonText")?.value;
+  const link = document.getElementById("buttonLink")?.value;
+
+  if (!text || !link) {
+    alert("Fill in both fields");
+    return;
+  }
+
+  db.collection("sidebarButtons").add({
+    text,
+    link
+  });
 }
 
-// 🔥 PASTE NEW ADMIN PANEL CODE BELOW THIS LINE
+
+// =======================
+// TOGGLE SIDEBAR
+// =======================
+function toggleSidebar() {
+  document.getElementById("sidebar")?.classList.toggle("collapsed");
+  document.getElementById("main")?.classList.toggle("collapsed");
+}
+
+
+// =======================
+// PAGE LOAD LISTENERS
+// =======================
 document.addEventListener("DOMContentLoaded", function () {
 
-  console.log("Admin page loaded");
+  console.log("Page loaded");
 
+  // =======================
+  // MAIN PAGE POSTS
+  // =======================
+  if (document.getElementById("posts")) {
+    db.collection("posts")
+      .orderBy("created", "desc")
+      .onSnapshot(snapshot => {
+        const postsDiv = document.getElementById("posts");
+        postsDiv.innerHTML = "";
+
+        snapshot.forEach(doc => {
+          const post = doc.data();
+          postsDiv.innerHTML += `
+            <div class="post">${post.content}</div>
+          `;
+        });
+      });
+  }
+
+
+  // =======================
+  // MAIN PAGE SIDEBAR
+  // =======================
+  if (document.getElementById("sidebar")) {
+    db.collection("sidebarButtons")
+      .onSnapshot(snapshot => {
+
+        const sidebar = document.getElementById("sidebar");
+        sidebar.innerHTML = "<button onclick='toggleSidebar()'>☰</button>";
+
+        snapshot.forEach(doc => {
+          const btn = doc.data();
+          sidebar.innerHTML += `
+            <button onclick="location.href='${btn.link}'">
+              ${btn.text}
+            </button>
+          `;
+        });
+      });
+  }
+
+
+  // =======================
+  // ADMIN PANEL
+  // =======================
   if (document.getElementById("adminPosts")) {
 
     auth.onAuthStateChanged(user => {
@@ -119,6 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       console.log("Logged in as:", user.uid);
 
+      // LOAD POSTS
       db.collection("posts")
         .orderBy("created", "desc")
         .onSnapshot(snapshot => {
@@ -140,6 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
+      // LOAD SIDEBAR BUTTONS
       db.collection("sidebarButtons")
         .onSnapshot(snapshot => {
 
@@ -166,13 +188,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+
+// =======================
+// DELETE FUNCTIONS
+// =======================
 function deletePost(id) {
+  if (!confirm("Delete this post?")) return;
+
   db.collection("posts").doc(id).delete()
     .then(() => alert("Post deleted"))
     .catch(error => alert("Delete failed: " + error.message));
 }
 
 function deleteButton(id) {
+  if (!confirm("Delete this button?")) return;
+
   db.collection("sidebarButtons").doc(id).delete()
     .then(() => alert("Button deleted"))
     .catch(error => alert("Delete failed: " + error.message));
