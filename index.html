@@ -1,1 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Site</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
 
+<div class="topbar">
+  <button class="login-btn" onclick="location.href='admin.html'">Admin Login</button>
+</div>
+
+<div id="sidebar" class="sidebar">
+</div>
+
+<div id="main" class="main">
+  <h1>Posts</h1>
+  <div id="posts"></div>
+</div>
+
+<script src="firebase.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
