@@ -65,3 +65,10 @@ function toggleSidebar() {
   document.getElementById("sidebar").classList.toggle("collapsed");
   document.getElementById("main").classList.toggle("collapsed");
 }
+
+function logout() {
+  auth.signOut().then(() => {
+    alert("Logged out");
+    window.location.href = "index.html";
+  });
+}
