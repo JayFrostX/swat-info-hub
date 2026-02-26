@@ -1,18 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Admin Panel</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-</head>
 <body>
 
-<h2>Admin Login</h2>
-<input id="email" placeholder="Email"><br><br>
-<input id="password" type="password" placeholder="Password"><br><br>
-<button onclick="login()">Login</button>
+<h2>Admin Panel</h2>
+<button onclick="logout()">Logout</button>
 
 <hr>
 
@@ -20,12 +9,19 @@
 <textarea id="postContent"></textarea><br><br>
 <button onclick="createPost()">Post</button>
 
+<h2>Existing Posts</h2>
+<div id="adminPosts"></div>
+
+<hr>
+
 <h2>Add Sidebar Button</h2>
 <input id="buttonText" placeholder="Button Text">
 <input id="buttonLink" placeholder="Link">
 <button onclick="addButton()">Add</button>
 
+<h2>Existing Sidebar Buttons</h2>
+<div id="adminButtons"></div>
+
 <script src="firebase.js"></script>
 <script src="app.js"></script>
 </body>
-</html>
