@@ -1,1 +1,70 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: white;
+}
 
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: #000;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  z-index: 1000;
+}
+
+.login-btn {
+  background: #222;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.sidebar {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  width: 220px;
+  height: 100%;
+  background: black;
+  overflow: hidden;
+  transition: width 0.3s;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar button {
+  width: 100%;
+  background: none;
+  color: white;
+  border: none;
+  padding: 15px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.main {
+  margin-top: 60px;
+  margin-left: 220px;
+  padding: 20px;
+  transition: margin-left 0.3s;
+}
+
+.main.collapsed {
+  margin-left: 60px;
+}
+
+.post {
+  background: #1c1c1c;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
