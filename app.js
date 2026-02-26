@@ -88,3 +88,92 @@ function deletePost(id) {
     });
 
 }
+// LOGIN FUNCTION
+function login() {
+   ...
+}
+
+// CREATE POST
+function createPost() {
+   ...
+}
+
+// ADD BUTTON
+function addButton() {
+   ...
+}
+
+// 🔥 PASTE NEW ADMIN PANEL CODE BELOW THIS LINE
+document.addEventListener("DOMContentLoaded", function () {
+
+  console.log("Admin page loaded");
+
+  if (document.getElementById("adminPosts")) {
+
+    auth.onAuthStateChanged(user => {
+
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      console.log("Logged in as:", user.uid);
+
+      db.collection("posts")
+        .orderBy("created", "desc")
+        .onSnapshot(snapshot => {
+
+          const container = document.getElementById("adminPosts");
+          container.innerHTML = "";
+
+          snapshot.forEach(doc => {
+            const post = doc.data();
+
+            container.innerHTML += `
+              <div class="post">
+                ${post.content}
+                <br><br>
+                <button onclick="deletePost('${doc.id}')">Delete</button>
+              </div>
+            `;
+          });
+
+        });
+
+      db.collection("sidebarButtons")
+        .onSnapshot(snapshot => {
+
+          const container = document.getElementById("adminButtons");
+          container.innerHTML = "";
+
+          snapshot.forEach(doc => {
+            const btn = doc.data();
+
+            container.innerHTML += `
+              <div class="post">
+                ${btn.text} → ${btn.link}
+                <br><br>
+                <button onclick="deleteButton('${doc.id}')">Delete</button>
+              </div>
+            `;
+          });
+
+        });
+
+    });
+
+  }
+
+});
+
+function deletePost(id) {
+  db.collection("posts").doc(id).delete()
+    .then(() => alert("Post deleted"))
+    .catch(error => alert("Delete failed: " + error.message));
+}
+
+function deleteButton(id) {
+  db.collection("sidebarButtons").doc(id).delete()
+    .then(() => alert("Button deleted"))
+    .catch(error => alert("Delete failed: " + error.message));
+}
