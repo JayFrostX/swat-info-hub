@@ -3,25 +3,92 @@
 <head>
   <title>Live Site</title>
   <link rel="stylesheet" href="style.css">
+
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
+<!-- COMMUNITY LOGIN BUTTON (TOP LEFT) -->
+<button id="communityLoginBtn"
+        onclick="openLoginModal()"
+        style="position:fixed; top:15px; left:15px; z-index:1000;">
+  Community Login
+</button>
+
+<!-- PROFILE DISPLAY (REPLACES LOGIN WHEN LOGGED IN) -->
+<div id="userProfile"
+     style="position:fixed; top:15px; left:15px; display:none; z-index:1000;">
+  <span id="userEmail"></span>
+  <button onclick="communityLogout()">Logout</button>
+</div>
+
+
+<!-- ADMIN BUTTON (YOUR ORIGINAL BUTTON) -->
 <div class="topbar">
-  <button class="login-btn" onclick="location.href='admin.html'">Admin Login</button>
+  <button class="login-btn" onclick="location.href='admin.html'">
+    Admin Login
+  </button>
 </div>
 
-<div id="sidebar" class="sidebar">
-</div>
 
+<!-- SIDEBAR -->
+<div id="sidebar" class="sidebar"></div>
+
+
+<!-- MAIN CONTENT -->
 <div id="main" class="main">
   <h1>Posts</h1>
   <div id="posts"></div>
 </div>
 
+
+<!-- LOGIN / REGISTER MODAL -->
+<div id="loginModal"
+     style="display:none; position:fixed;
+     top:0; left:0; width:100%; height:100%;
+     background:rgba(0,0,0,0.6);
+     justify-content:center; align-items:center; z-index:2000;">
+
+  <div style="background:#1f2a38;
+              padding:25px;
+              width:300px;
+              border-radius:8px;
+              color:white;">
+
+    <h3>Community Login</h3>
+
+    <input id="communityEmail"
+           placeholder="Email"
+           style="width:100%; margin-bottom:10px; padding:6px;">
+
+    <input id="communityPassword"
+           type="password"
+           placeholder="Password"
+           style="width:100%; margin-bottom:10px; padding:6px;">
+
+    <button onclick="communityLogin()"
+            style="width:100%; margin-bottom:10px;">
+      Login
+    </button>
+
+    <button onclick="communityRegister()"
+            style="width:100%; margin-bottom:10px;">
+      Create Account
+    </button>
+
+    <button onclick="closeLoginModal()"
+            style="width:100%;">
+      Close
+    </button>
+
+  </div>
+</div>
+
+
 <script src="firebase.js"></script>
 <script src="app.js"></script>
+
 </body>
 </html>
