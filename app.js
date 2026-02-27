@@ -207,3 +207,75 @@ function deleteButton(id) {
     .then(() => alert("Button deleted"))
     .catch(error => alert("Delete failed: " + error.message));
 }
+
+// =======================
+// COMMUNITY LOGIN SYSTEM
+// =======================
+
+function openLoginModal() {
+  document.getElementById("loginModal").style.display = "flex";
+}
+
+function closeLoginModal() {
+  document.getElementById("loginModal").style.display = "none";
+}
+
+function communityLogin() {
+  const email = document.getElementById("communityEmail").value;
+  const password = document.getElementById("communityPassword").value;
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(userCredential => {
+
+      if (!userCredential.user.emailVerified) {
+        alert("Please verify your email before logging in.");
+        auth.signOut();
+        return;
+      }
+
+      closeLoginModal();
+    })
+    .catch(error => alert(error.message));
+}
+
+function communityRegister() {
+  const email = document.getElementById("communityEmail").value;
+  const password = document.getElementById("communityPassword").value;
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(userCredential => {
+      userCredential.user.sendEmailVerification()
+        .then(() => {
+          alert("Verification email sent. Please check your inbox.");
+          auth.signOut();
+        });
+    })
+    .catch(error => alert(error.message));
+}
+
+function communityLogout() {
+  auth.signOut();
+}
+
+// =======================
+// SHOW USER PROFILE IF LOGGED IN
+// =======================
+
+auth.onAuthStateChanged(user => {
+
+  if (!document.getElementById("communityLoginBtn")) return;
+
+  if (user && user.emailVerified) {
+
+    document.getElementById("communityLoginBtn").style.display = "none";
+    document.getElementById("userProfile").style.display = "block";
+    document.getElementById("userEmail").innerText = user.email;
+
+  } else {
+
+    document.getElementById("communityLoginBtn").style.display = "block";
+    document.getElementById("userProfile").style.display = "none";
+
+  }
+
+});
